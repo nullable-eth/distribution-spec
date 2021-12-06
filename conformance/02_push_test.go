@@ -38,6 +38,7 @@ var test02Push = func() {
 
 			g.Specify("PUT request to session URL with digest should yield 201 response", func() {
 				SkipIfDisabled(push)
+				Expect(lastResponse).To(Not(BeNil()))
 				req := client.NewRequest(reggie.PUT, lastResponse.GetRelativeLocation()).
 					SetQueryParam("digest", testBlobADigest).
 					SetHeader("Content-Type", "application/octet-stream").
@@ -83,6 +84,7 @@ var test02Push = func() {
 				req := client.NewRequest(reggie.GET, "/v2/<name>/blobs/<digest>", reggie.WithDigest(configs[1].Digest))
 				resp, err := client.Do(req)
 				Expect(err).To(BeNil())
+				Expect(lastResponse).To(Not(BeNil()))
 				if lastResponse.StatusCode() == http.StatusAccepted {
 					Expect(resp.StatusCode()).To(Equal(http.StatusNotFound))
 				} else {
@@ -101,6 +103,7 @@ var test02Push = func() {
 
 			g.Specify("PUT upload of a blob should yield a 201 Response", func() {
 				SkipIfDisabled(push)
+				Expect(lastResponse).To(Not(BeNil()))
 				req := client.NewRequest(reggie.PUT, lastResponse.GetRelativeLocation()).
 					SetHeader("Content-Length", configs[1].ContentLength).
 					SetHeader("Content-Type", "application/octet-stream").
@@ -189,6 +192,7 @@ var test02Push = func() {
 
 			g.Specify("PUT request with final chunk should return 201", func() {
 				SkipIfDisabled(push)
+				Expect(lastResponse).To(Not(BeNil()))
 				req := client.NewRequest(reggie.PUT, lastResponse.GetRelativeLocation()).
 					SetHeader("Content-Length", testBlobBChunk2Length).
 					SetHeader("Content-Range", testBlobBChunk2Range).
@@ -234,6 +238,7 @@ var test02Push = func() {
 
 			g.Specify("GET request to test digest within cross-mount namespace should return 200", func() {
 				SkipIfDisabled(push)
+				Expect(lastResponse).To(Not(BeNil()))
 				RunOnlyIf(lastResponse.StatusCode() == http.StatusCreated)
 
 				req := client.NewRequest(reggie.GET, lastResponse.GetRelativeLocation())
@@ -244,6 +249,7 @@ var test02Push = func() {
 
 			g.Specify("Cross-mounting of nonexistent blob should yield session id", func() {
 				SkipIfDisabled(push)
+				Expect(lastResponse).To(Not(BeNil()))
 				RunOnlyIf(lastResponse.StatusCode() == http.StatusAccepted)
 
 				loc := lastResponse.GetRelativeLocation()
